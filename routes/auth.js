@@ -14,15 +14,12 @@ const fetchuser = require("../middleware/fetchuser");
 
 // SIGN UP API 
 router.post("/signup",[
-    body('name',"min length require 2").isLength({min:2}),
-    body('email',"Invalid email").isEmail(),
-    body('password',"min length require 6").isLength({min:6})
+    // body('name',"min length require 2").isLength({min:2}),
+    // body('email',"Invalid email").isEmail(),
+    // body('password',"min length require 6").isLength({min:6})
 ],async(req,res)=>{
 
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
+ 
 
 
     //   CREATE DATABAS
@@ -34,8 +31,8 @@ router.post("/signup",[
            password:  CryptoJS.AES.encrypt(password,process.env.SECRET_KEY).toString()
            
           })
-          await user.save()
-
+      let userdata=    await user.save()
+ console.log(userdata);
 
           let data={
             user:{
@@ -43,7 +40,7 @@ router.post("/signup",[
             }
           }
           const token = jwt.sign(data, process.env.PRIVET_KEY);
-          res.status(200).json({ "authentication":token})
+          res.status(200).json({user:userdata.name ,userEmail:userdata.email, "authentication":token})
     }catch(err){
         console.log(err);
     }
@@ -51,14 +48,7 @@ router.post("/signup",[
 
 
 // LOGIN API
-router.post("/login",[ 
-    body('email',"Invalid email").isEmail(),
-    body('password',"min length require 6").isLength({min:6})
-],async(req,res)=>{
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
+router.post("/login",async(req,res)=>{
    
 
     try{
@@ -105,7 +95,7 @@ router.post("/getUser/:id",fetchuser,async(req,res)=>{
             return  res.status(404).send("Not found")
            }
            
-           res.status(200).json({user:user})           
+           res.status(200).json({user:user.email,userEmail:user.name})           
     }catch(err){
         console.log(err);
     }

@@ -18,5 +18,5 @@ app.get('/', (req, res) => {
 })
 
 app.listen(port, () => {
-  console.log(`Example app ggg http://localhost:${port}`)
+  console.log(`Example app ggg http://10.0.0.37:${port}`)
 })
