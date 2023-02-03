@@ -4,7 +4,6 @@ const app=express()
 const router = express.Router()
 const User=require("../models/user")
 const CryptoJS = require("crypto-js");
-const SECRET_KEY="#####%%%%12345"
 const { body, validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 const fetchuser = require("../middleware/fetchuser");
@@ -32,7 +31,7 @@ router.post("/signup",[
        let user = new User({
            name,
            email,
-           password:  CryptoJS.AES.encrypt(password, SECRET_KEY).toString()
+           password:  CryptoJS.AES.encrypt(password,process.env.SECRET_KEY).toString()
            
           })
           await user.save()
@@ -66,7 +65,7 @@ router.post("/login",[
 
         const {email}=req.body
         let user=await User.findOne({email})
-        const bytes  = CryptoJS.AES.decrypt(user.password, SECRET_KEY);
+        const bytes  = CryptoJS.AES.decrypt(user.password, process.env.SECRET_KEY);
         const userPassword = bytes.toString(CryptoJS.enc.Utf8);
 
         if(user){      

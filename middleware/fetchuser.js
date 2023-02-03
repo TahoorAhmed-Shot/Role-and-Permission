@@ -1,6 +1,4 @@
 const jwt=require("jsonwebtoken")
-
-
 const fetchuser=async(req,res,next)=>{
   
     let token=req.header("auth-token")
