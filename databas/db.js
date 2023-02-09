@@ -4,7 +4,7 @@ mongoose.set('strictQuery', true);
 const db=async()=> {
     try{
 
-        await mongoose.connect('mongodb://127.0.0.1:27017/Sokit-io');
+        await mongoose.connect('mongodb://127.0.0.1:27017/Production');
         console.log("connected");
     }catch(err){
       console.log(err);
