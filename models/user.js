@@ -18,6 +18,11 @@ const userSchema = new Schema(
       require: true,
       min: [6],
     },
+    role: {
+      type: String,
+      default: "user",
+      enum: ["user", "admin", "superadmin"],
+    },
   },
   { timestamps: true }
 );

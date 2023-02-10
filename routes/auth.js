@@ -5,6 +5,7 @@ const User = require("../models/user");
 const CryptoJS = require("crypto-js");
 const { body, validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
+
 const fetchuser = require("../middleware/fetchuser");
 
 // SIGN UP API
@@ -22,7 +23,7 @@ router.post(
     }
     //   CREATE DATABAS
     try {
-      const { name, email, password } = req.body;
+      const { name, email, password, role } = req.body;
       let user = await User.findOne({ email });
       if (user) {
         return res.status(404).json({ user: "Invalid user Identity" });
@@ -35,6 +36,7 @@ router.post(
           password,
           process.env.SECRET_KEY
         ).toString(),
+        role,
       });
       let userdata = await user.save();
       console.log(userdata);
@@ -42,6 +44,8 @@ router.post(
       let data = {
         user: {
           id: user.id,
+          name: user.name,
+          role: user.role,
         },
       };
       const token = jwt.sign(data, process.env.PRIVET_KEY);
@@ -70,6 +74,8 @@ router.post("/login", async (req, res) => {
         let data = {
           user: {
             id: user.id,
+            name: user.name,
+            role: user.role,
           },
         };
         const token = jwt.sign(data, process.env.PRIVET_KEY);
